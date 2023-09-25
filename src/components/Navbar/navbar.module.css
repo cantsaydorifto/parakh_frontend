@@ -1,0 +1,36 @@
+.navbar {
+  height: 60px;
+  padding: 0 20px;
+  display: flex;
+  z-index: 2;
+  justify-content: space-between;
+  gap: 50px;
+  align-items: center;
+  background-color: #1776bb;
+}
+
+.navbar > h1 {
+  color: rgb(47, 87, 86);
+}
+
+.logo {
+  text-decoration: none;
+  height: 100%;
+  padding: 3px 0;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.logo > img {
+  height: 70%;
+}
+
+.navbar > ul {
+  display: flex;
+  gap: 50px;
+  list-style: none;
+  padding-right: 20px;
+}
+.navbar > ul > li {
+  cursor: pointer;
+}

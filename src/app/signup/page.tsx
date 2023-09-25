@@ -3,6 +3,9 @@
 import useAuth from "@/hooks/useAuth";
 import axios from "axios";
 import { useState } from "react";
+import styles from "./signup.module.css";
+import UserInformation from "./UserInformation";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
   const ctx = useAuth();
@@ -17,6 +20,8 @@ export default function Page() {
     firstName: "",
     lastName: "",
   });
+
+  const router = useRouter();
 
   async function handleAuth(userInfo: {
     username: string;
@@ -39,13 +44,14 @@ export default function Page() {
         username: userInfo.username,
         password: userInfo.password,
         email: userInfo.email,
-        lastName: userInfo.email,
-        firstName: userInfo.email,
+        lastName: userInfo.lastName,
+        firstName: userInfo.firstName,
       });
       console.log(res.data);
       ctx.setAuth({ isAuthenticated: true, user: res.data });
       setError(null);
       setLoading(false);
+      router.push("/dashboard");
     } catch (err: any) {
       setLoading(false);
       console.log(err);
@@ -54,83 +60,18 @@ export default function Page() {
   }
 
   return (
-    <form>
-      <div>
-        <label htmlFor="username">Username</label>
-        <input
-          value={userInfo.username}
-          onChange={(e) =>
-            setUserInfo((prev) => {
-              return { ...prev, username: e.target.value };
-            })
-          }
-          type="text"
-          id="username"
+    <main className={styles.main}>
+      <form>
+        <img className={styles.logo} src="/logo.png" alt="" />
+        <UserInformation
+          userInfo={userInfo}
+          setUserInfo={setUserInfo}
+          handleAuth={handleAuth}
         />
-      </div>
-      <div>
-        <label htmlFor="email">Email</label>
-        <input
-          value={userInfo.email}
-          onChange={(e) =>
-            setUserInfo((prev) => {
-              return { ...prev, email: e.target.value };
-            })
-          }
-          type="text"
-          id="email"
-        />
-      </div>
-      <div>
-        <label htmlFor="password">Password</label>
-        <input
-          value={userInfo.password}
-          onChange={(e) =>
-            setUserInfo((prev) => {
-              return { ...prev, password: e.target.value };
-            })
-          }
-          type="password"
-          id="password"
-        />
-      </div>
-      <div>
-        <label htmlFor="firstName">First Name</label>
-        <input
-          value={userInfo.firstName}
-          onChange={(e) =>
-            setUserInfo((prev) => {
-              return { ...prev, firstName: e.target.value };
-            })
-          }
-          type="text"
-          id="firstName"
-        />
-      </div>
-      <div>
-        <label htmlFor="lastName">Last Name</label>
-        <input
-          value={userInfo.lastName}
-          onChange={(e) =>
-            setUserInfo((prev) => {
-              return { ...prev, lastName: e.target.value };
-            })
-          }
-          type="text"
-          id="lastName"
-        />
-      </div>
-      <button
-        onClick={async (event) => {
-          event.preventDefault();
-          await handleAuth(userInfo);
-        }}
-      >
-        Sign Up
-      </button>
-      {!loading && !error && <p></p>}
-      {loading && <p key={"loading"}>Loading...</p>}
-      {error && <p key={error}>{error}</p>}
-    </form>
+        {!loading && !error && <p></p>}
+        {loading && <p key={"loading"}>Loading...</p>}
+        {error && <p key={error}>{error}</p>}
+      </form>
+    </main>
   );
 }
